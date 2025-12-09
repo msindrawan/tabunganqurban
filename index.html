@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Dashboard Tabungan Qurban Perumahan Puri Hijau 2026">
+    <title>Tabungan Qurban Puri Hijau 2026</title>
+    
+    <!-- CDN Libraries (Tailwind & Chart.js) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        qurban: {
+                            light: '#ECFDF5', // Emerald 50
+                            primary: '#059669', // Emerald 600
+                            dark: '#064E3B', // Emerald 900
+                            accent: '#D97706', // Amber 600
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        arabic: ['"Amiri"', 'serif'],
+                    },
+                    boxShadow: {
+                        'glass': '0 4px 30px rgba(0, 0, 0, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#059669 0.5px, transparent 0.5px), radial-gradient(#059669 0.5px, #f8fafc 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* Animated Progress Bar Striping */
+        .progress-stripe {
+            background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+            background-size: 1rem 1rem;
+            animation: stripe-animate 1s linear infinite;
+        }
+
+        @keyframes stripe-animate {
+            from { background-position: 1rem 0; }
+            to { background-position: 0 0; }
+        }
+
+        /* Smooth Scrolling */
+        html { scroll-behavior: smooth; }
+
+        /* Mobile specific fixes */
+        @media (max-width: 640px) {
+            .container { padding-left: 1rem; padding-right: 1rem; }
+        }
+    </style>
+</head>
+<body class="text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-qurban-primary text-white shadow-lg sticky top-0 z-50 backdrop-blur-md bg-opacity-95">
+        <div class="container mx-auto py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-white text-qurban-primary p-2 rounded-xl w-10 h-10 flex items-center justify-center shadow-md">
+                    <i class="fa-solid fa-kaaba text-lg"></i>
+                </div>
+                <div class="leading-tight">
+                    <h1 class="font-bold text-lg tracking-tight">Tabungan Qurban</h1>
+                    <p class="text-[10px] text-qurban-light uppercase tracking-wider font-semibold">Puri Hijau 2026</p>
+                </div>
+            </div>
+            
+            <!-- Ayat (Visible on Desktop only for cleanliness) -->
+            <div class="hidden md:block text-right">
+                <p class="font-arabic text-xl text-yellow-300 drop-shadow-sm">فَصَلِّ لِرَبِّكَ وَانْحَرْ</p>
+            </div>
+            
+            <!-- Mobile Menu Icon (Visual only) -->
+            <div class="md:hidden text-qurban-light opacity-80">
+                <i class="fa-solid fa-mosque"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero / Countdown -->
+    <section class="bg-qurban-dark text-white py-8 relative overflow-hidden rounded-b-[2rem] shadow-xl mb-6">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]"></div>
+        
+        <div class="container mx-auto text-center relative z-10">
+            <h2 class="text-sm font-semibold uppercase tracking-widest text-qurban-light mb-1">Menuju Idul Adha 1447 H</h2>
+            <p class="text-xs opacity-75 mb-6">Target: 26 Mei 2026</p>
+
+            <!-- Countdown Grid -->
+            <div class="grid grid-cols-4 gap-2 max-w-sm mx-auto px-2">
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-2 border border-white/10">
+                    <span id="days" class="block text-xl md:text-3xl font-bold text-yellow-400">00</span>
+                    <span class="text-[10px] uppercase">Hari</span>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-2 border border-white/10">
+                    <span id="hours" class="block text-xl md:text-3xl font-bold text-white">00</span>
+                    <span class="text-[10px] uppercase">Jam</span>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-2 border border-white/10">
+                    <span id="minutes" class="block text-xl md:text-3xl font-bold text-white">00</span>
+                    <span class="text-[10px] uppercase">Menit</span>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-2 border border-white/10">
+                    <span id="seconds" class="block text-xl md:text-3xl font-bold text-red-400">00</span>
+                    <span class="text-[10px] uppercase">Detik</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto pb-20 flex-grow">
+        
+        <!-- Summary Stats (Stacked on Mobile) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+            <div class="glass-card p-4 rounded-xl flex items-center justify-between shadow-sm border-l-4 border-qurban-primary">
+                <div>
+                    <p class="text-slate-500 text-xs font-bold uppercase tracking-wide">Total Peserta</p>
+                    <p id="total-participants" class="text-2xl font-bold text-slate-800">0</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-qurban-primary">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+            </div>
+
+            <div class="glass-card p-4 rounded-xl flex items-center justify-between shadow-sm border-l-4 border-yellow-500">
+                <div>
+                    <p class="text-slate-500 text-xs font-bold uppercase tracking-wide">Terkumpul</p>
+                    <p id="total-collected" class="text-2xl font-bold text-slate-800">Rp 0</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+            </div>
+            
+            <div class="glass-card p-4 rounded-xl flex items-center justify-between shadow-sm border-l-4 border-blue-500">
+                <div>
+                    <p class="text-slate-500 text-xs font-bold uppercase tracking-wide">Target/Orang</p>
+                    <p class="text-xl font-bold text-slate-800">Rp 3.200.000</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                    <i class="fa-solid fa-bullseye"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts (Stacked on Mobile) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+            <div class="glass-card p-5 rounded-xl shadow-sm">
+                <h3 class="font-bold text-slate-700 text-sm mb-4 flex items-center">
+                    <i class="fa-solid fa-chart-pie mr-2 text-qurban-primary"></i> Progres Keseluruhan
+                </h3>
+                <div class="relative h-48 w-full">
+                    <canvas id="overallChart"></canvas>
+                </div>
+            </div>
+            <div class="glass-card p-5 rounded-xl shadow-sm">
+                <h3 class="font-bold text-slate-700 text-sm mb-4 flex items-center">
+                    <i class="fa-solid fa-trophy mr-2 text-yellow-500"></i> 5 Penabung Tertinggi
+                </h3>
+                <div class="relative h-48 w-full">
+                    <canvas id="topSaversChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search & List -->
+        <div class="glass-card rounded-xl shadow-lg overflow-hidden">
+            <!-- Header List -->
+            <div class="p-4 bg-white border-b border-slate-100 sticky top-0 z-20">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <h3 class="font-bold text-lg text-slate-800 flex items-center">
+                        <i class="fa-solid fa-list-check mr-2 text-qurban-primary"></i> Data Peserta
+                    </h3>
+                    <div class="relative">
+                        <input type="text" id="search-input" placeholder="Cari nama..." class="w-full bg-slate-50 border border-slate-200 text-sm rounded-lg px-4 py-2.5 pl-10 focus:outline-none focus:ring-2 focus:ring-qurban-primary transition-all">
+                        <i class="fa-solid fa-search absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Columns (Hidden on Mobile) -->
+            <div class="hidden md:grid grid-cols-12 bg-slate-50 p-3 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+                <div class="col-span-1 text-center">No</div>
+                <div class="col-span-4">Nama Peserta</div>
+                <div class="col-span-3 text-right">Saldo</div>
+                <div class="col-span-3 text-center">Progress</div>
+                <div class="col-span-1 text-center">Status</div>
+            </div>
+
+            <!-- List Container -->
+            <div id="participant-list" class="divide-y divide-slate-100 bg-white">
+                <!-- Javascript injects rows here -->
+            </div>
+
+            <!-- Rincian Tabungan Hyperlink -->
+            <div class="p-4 bg-slate-50 border-t border-slate-100 text-center">
+                <a href="https://onedrive.live.com/:x:/g/personal/5ABB46F172691A4B/ET1DrAteWyhCoD_87OpgqDsBKsIVaVHIGgKIkAIj6H1mlQ?resid=5ABB46F172691A4B!s0bac433d5b5e4228a03ffcecea60a83b&ithint=file%2Cxlsx&e=gM30lg&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvYy81YWJiNDZmMTcyNjkxYTRiL0VUMURyQXRlV3loQ29EXzg3T3BncURzQktzSVZhVkhJR2dLSWtBSWo2SDFtbFE_ZT1nTTMwbGc" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold text-qurban-primary hover:text-qurban-dark hover:underline transition-all">
+                    <i class="fa-solid fa-file-excel"></i> Lihat Rincian Tabungan Lengkap (Excel)
+                </a>
+            </div>
+        </div>
+        
+        <!-- Contact & Address Section -->
+        <div class="glass-card mt-6 p-6 rounded-xl text-center shadow-sm relative overflow-hidden">
+            <!-- Decorative Top Border -->
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-qurban-primary to-yellow-400"></div>
+            
+            <h3 class="font-bold text-slate-800 mb-4 flex justify-center items-center gap-2">
+               <i class="fa-solid fa-circle-info text-qurban-primary"></i> Layanan Informasi
+            </h3>
+            
+            <p class="text-sm text-slate-600 mb-3">
+               Untuk konsultasi dan pendaftaran silahkan hubungi:
+            </p>
+            
+            <!-- Contacts Grid -->
+            <div class="flex flex-col md:flex-row justify-center items-center gap-3 md:gap-6 mb-5">
+               <!-- Contact 1 -->
+               <a href="https://wa.me/6285669669222" class="flex items-center gap-3 bg-white bg-opacity-60 px-5 py-3 rounded-lg border border-slate-200 shadow-sm hover:shadow-md hover:border-qurban-primary transition-all group w-full md:w-auto justify-center">
+                   <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center group-hover:bg-green-500 transition-colors">
+                       <i class="fa-brands fa-whatsapp text-green-600 text-xl group-hover:text-white transition-colors"></i>
+                   </div>
+                   <div class="text-left">
+                       <p class="font-bold text-slate-700 text-sm group-hover:text-qurban-primary">M. Sani Indrawan</p>
+                       <p class="font-mono text-xs text-slate-500">0856-6966-9222</p>
+                   </div>
+               </a>
+
+               <!-- Contact 2 -->
+               <a href="https://wa.me/6281229318931" class="flex items-center gap-3 bg-white bg-opacity-60 px-5 py-3 rounded-lg border border-slate-200 shadow-sm hover:shadow-md hover:border-qurban-primary transition-all group w-full md:w-auto justify-center">
+                   <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center group-hover:bg-green-500 transition-colors">
+                       <i class="fa-brands fa-whatsapp text-green-600 text-xl group-hover:text-white transition-colors"></i>
+                   </div>
+                   <div class="text-left">
+                       <p class="font-bold text-slate-700 text-sm group-hover:text-qurban-primary">Margiyono</p>
+                       <p class="font-mono text-xs text-slate-500">0812-2931-8931</p>
+                   </div>
+               </a>
+            </div>
+
+            <!-- Address -->
+            <div class="text-xs text-slate-500 border-t border-slate-200 pt-4 mt-2">
+               <p class="flex justify-center items-start md:items-center gap-2">
+                   <i class="fa-solid fa-location-dot text-red-500 mt-0.5 md:mt-0"></i> 
+                   <span><span class="font-semibold">Alamat:</span> Perumahan Puri Hijau, Jl. Pulau Singkep 7 Sukabumi Bandar Lampung</span>
+               </p>
+            </div>
+
+            <!-- Aplikasi Lainnya -->
+            <div class="mt-6 pt-5 border-t border-slate-100">
+                <h4 class="font-bold text-slate-700 text-sm mb-4">Aplikasi Lainnya dari Pengembang</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3 text-left">
+                    <!-- App 1 -->
+                    <a href="https://kalkulatorsyariah.pages.dev/" target="_blank" class="flex items-center gap-3 p-3 rounded-lg bg-slate-50 hover:bg-white border border-transparent hover:border-slate-200 hover:shadow-md transition-all group">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors shrink-0">
+                            <i class="fa-solid fa-calculator text-xs"></i>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-600 group-hover:text-slate-800">Kalkulator Talak, Iddah & Hadhanah</span>
+                    </a>
+                    
+                    <!-- App 2 -->
+                    <a href="https://hitungzakat.pages.dev/" target="_blank" class="flex items-center gap-3 p-3 rounded-lg bg-slate-50 hover:bg-white border border-transparent hover:border-slate-200 hover:shadow-md transition-all group">
+                        <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center group-hover:bg-green-600 group-hover:text-white transition-colors shrink-0">
+                            <i class="fa-solid fa-hand-holding-dollar text-xs"></i>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-600 group-hover:text-slate-800">Hitung Zakat Maal</span>
+                    </a>
+
+                    <!-- App 3 -->
+                    <a href="https://bagihasil-43q.pages.dev/" target="_blank" class="flex items-center gap-3 p-3 rounded-lg bg-slate-50 hover:bg-white border border-transparent hover:border-slate-200 hover:shadow-md transition-all group">
+                        <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors shrink-0">
+                            <i class="fa-solid fa-handshake text-xs"></i>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-600 group-hover:text-slate-800">Kalkulator Mudharabah & Musyarakah</span>
+                    </a>
+
+                    <!-- App 4 -->
+                    <a href="https://hitungwarisku.pages.dev/" target="_blank" class="flex items-center gap-3 p-3 rounded-lg bg-slate-50 hover:bg-white border border-transparent hover:border-slate-200 hover:shadow-md transition-all group">
+                        <div class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center group-hover:bg-orange-600 group-hover:text-white transition-colors shrink-0">
+                            <i class="fa-solid fa-users-between-lines text-xs"></i>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-600 group-hover:text-slate-800">Kalkulator Waris</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto bg-white border-t border-slate-200 py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm font-semibold text-qurban-primary">Tabungan Qurban Puri Hijau 2026</p>
+            <p class="text-xs text-slate-400 mt-1">
+                Dikembangkan oleh <span class="font-bold text-slate-600">Ayah Syathir</span>
+            </p>
+            <p class="text-[10px] text-slate-300 mt-2 font-mono">v1.5</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT Logic -->
+    <script>
+        // --- KONFIGURASI UTAMA ---
+        const TARGET_PER_PERSON = 3200000;
+        const TARGET_DATE = new Date("May 26, 2026 00:00:00").getTime();
+
+        // --- DATA PESERTA (Update versi 1.5) ---
+        const participants = [
+            { id: 1, name: "Slamet Hardianto", deposited: 1500000 },
+            { id: 2, name: "Putri Lintang Veda", deposited: 1328000 },
+            { id: 3, name: "Margiyono", deposited: 1128000 },
+            { id: 4, name: "Sukriadi Siregar", deposited: 1500000 },
+            { id: 5, name: "Agus Sunarji", deposited: 1928000 },
+            { id: 6, name: "Chandra Arif", deposited: 2500000 },
+            { id: 7, name: "Tofik Hidayat", deposited: 142000 },
+            { id: 8, name: "Komarudin", deposited: 128000 },
+            { id: 9, name: "Bobby Chandra", deposited: 0 },
+            { id: 10, name: "Heri Dwi Saputra", deposited: 142000 },
+            { id: 11, name: "Kukuh Fu'adi", deposited: 128000 },
+            { id: 12, name: "Setyo Nugroho", deposited: 1500000 },
+            { id: 13, name: "Prima Ardani", deposited: 142000 },
+            { id: 14, name: "Sugiarto", deposited: 128000 },
+            { id: 15, name: "Teguh Widodo bin Dimin qq Daniel Conery", deposited: 1500000 },
+            { id: 16, name: "Indra Pratama Aziz", deposited: 0 },
+            { id: 17, name: "Andi Imawan", deposited: 0 },
+            { id: 18, name: "Bima Nugroho Putra", deposited: 1500000 },
+            { id: 19, name: "Wendi Lianto (mpok umi)", deposited: 0 },
+            { id: 20, name: "Martadinata", deposited: 2400000 },
+            { id: 21, name: "Antia Ferdiana", deposited: 0 },
+            { id: 22, name: "Yulius Widaryanto", deposited: 0 },
+            { id: 23, name: "H. Syarifudin bin Salim", deposited: 1500000 },
+            { id: 24, name: "Muhammad Mukhlis", deposited: 0 },
+            { id: 25, name: "Ananta Teratiksa", deposited: 600000 },
+            { id: 26, name: "Irwansyah", deposited: 0 },
+            { id: 27, name: "M Royhan Andri qq M Sani Indrawan", deposited: 1500000 }
+        ];
+
+        // --- UTILS ---
+        const formatRupiah = (number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+
+        // --- COUNTDOWN ---
+        const countdown = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = TARGET_DATE - now;
+
+            if (distance < 0) {
+                clearInterval(countdown);
+                document.getElementById("days").parentElement.parentElement.innerHTML = "<div class='col-span-4 text-center text-yellow-300 font-bold'>Waktu Qurban Telah Tiba!</div>";
+                return;
+            }
+
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = d < 10 ? "0" + d : d;
+            document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
+            document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
+            document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
+        }, 1000);
+
+        // --- CHARTS ---
+        let chartOverall, chartTop;
+
+        function initCharts(data) {
+            const totalRequired = data.length * TARGET_PER_PERSON;
+            const totalCollected = data.reduce((a, b) => a + b.deposited, 0);
+            const percent = Math.round((totalCollected / totalRequired) * 100);
+
+            // Doughnut
+            const ctxOverall = document.getElementById('overallChart').getContext('2d');
+            if(chartOverall) chartOverall.destroy();
+            
+            chartOverall = new Chart(ctxOverall, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Terkumpul', 'Kekurangan'],
+                    datasets: [{
+                        data: [totalCollected, Math.max(0, totalRequired - totalCollected)],
+                        backgroundColor: ['#059669', '#f1f5f9'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
+                    }
+                },
+                plugins: [{
+                    id: 'textCenter',
+                    beforeDraw: function(chart) {
+                        var width = chart.width, height = chart.height, ctx = chart.ctx;
+                        ctx.restore();
+                        ctx.font = "bold 1.5em sans-serif";
+                        ctx.textBaseline = "middle";
+                        ctx.fillStyle = "#059669";
+                        var text = percent + "%", textX = Math.round((width - ctx.measureText(text).width) / 2), textY = height / 2 - 10;
+                        ctx.fillText(text, textX, textY);
+                        ctx.font = "0.7em sans-serif";
+                        ctx.fillStyle = "#94a3b8";
+                        var sub = "Tercapai", subX = Math.round((width - ctx.measureText(sub).width) / 2), subY = height / 2 + 15;
+                        ctx.fillText(sub, subX, subY);
+                        ctx.save();
+                    }
+                }]
+            });
+
+            // Bar Chart (Top 5)
+            const sorted = [...data].sort((a, b) => b.deposited - a.deposited).slice(0, 5);
+            const ctxTop = document.getElementById('topSaversChart').getContext('2d');
+            if(chartTop) chartTop.destroy();
+
+            chartTop = new Chart(ctxTop, {
+                type: 'bar',
+                data: {
+                    labels: sorted.map(p => p.name.split(' ')[0]), // Nama depan saja
+                    datasets: [{
+                        label: 'Saldo',
+                        data: sorted.map(p => p.deposited),
+                        backgroundColor: '#F59E0B',
+                        borderRadius: 4,
+                        barThickness: 20
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { display: false },
+                        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                    }
+                }
+            });
+        }
+
+        // --- RENDER LIST ---
+        function renderParticipants(data) {
+            const container = document.getElementById("participant-list");
+            container.innerHTML = "";
+            let totalMoney = 0;
+
+            data.forEach((p, index) => {
+                totalMoney += p.deposited;
+                const percent = Math.min((p.deposited / TARGET_PER_PERSON) * 100, 100);
+                const isLunas = p.deposited >= TARGET_PER_PERSON;
+                
+                // Color Logic
+                let colorClass = "bg-red-500";
+                if(percent > 25) colorClass = "bg-orange-500";
+                if(percent > 50) colorClass = "bg-yellow-400";
+                if(percent > 75) colorClass = "bg-blue-500";
+                if(isLunas) colorClass = "bg-qurban-primary";
+
+                const stripeClass = (!isLunas && percent > 0) ? "progress-stripe" : "";
+
+                const html = `
+                    <div class="group p-4 hover:bg-slate-50 transition-colors grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+                        
+                        <!-- Mobile Layout: Header Row (No + Name + Status Icon) -->
+                        <div class="col-span-1 md:col-span-5 flex items-start gap-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold text-xs flex items-center justify-center border border-slate-200">
+                                ${p.id}
+                            </span>
+                            <div class="flex-grow min-w-0"> <!-- min-w-0 forces truncate to work -->
+                                <p class="font-semibold text-slate-800 text-sm md:text-base break-words leading-tight">
+                                    ${p.name}
+                                </p>
+                                <!-- Mobile Only Amount -->
+                                <div class="md:hidden mt-1 flex justify-between items-end">
+                                    <span class="font-mono text-sm font-bold ${isLunas ? 'text-qurban-primary' : 'text-slate-600'}">
+                                        ${formatRupiah(p.deposited)}
+                                    </span>
+                                    ${isLunas 
+                                        ? `<span class="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-bold">LUNAS</span>` 
+                                        : `<span class="text-[10px] text-slate-400">${Math.floor(percent)}%</span>`
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Desktop Amount -->
+                        <div class="hidden md:block col-span-3 text-right">
+                            <span class="font-mono font-bold text-slate-700 block">${formatRupiah(p.deposited)}</span>
+                        </div>
+
+                        <!-- Progress Bar (Full width on Mobile) -->
+                        <div class="col-span-1 md:col-span-3 w-full">
+                            <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden shadow-inner border border-slate-100">
+                                <div class="${colorClass} ${stripeClass} h-full rounded-full transition-all duration-1000 ease-out" style="width: ${percent}%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Desktop Status -->
+                        <div class="hidden md:block col-span-1 text-center">
+                            ${isLunas 
+                                ? `<i class="fa-solid fa-circle-check text-green-500 text-lg"></i>`
+                                : `<i class="fa-regular fa-circle text-slate-300"></i>`
+                            }
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+
+            // Update Header Stats
+            document.getElementById("total-participants").innerText = data.length;
+            document.getElementById("total-collected").innerText = formatRupiah(totalMoney);
+            
+            initCharts(data);
+        }
+
+        // --- SEARCH ---
+        document.getElementById("search-input").addEventListener("input", (e) => {
+            const key = e.target.value.toLowerCase();
+            renderParticipants(participants.filter(p => p.name.toLowerCase().includes(key)));
+        });
+
+        // Start
+        renderParticipants(participants);
+    </script>
+</body>
+</html>
