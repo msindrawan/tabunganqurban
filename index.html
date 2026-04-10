@@ -82,7 +82,7 @@
 
     <!-- Header -->
     <header class="bg-qurban-primary text-white shadow-lg sticky top-0 z-50 backdrop-blur-md bg-opacity-95">
-        <div class="container mx-auto py-3 flex justify-between items-center">
+        <div class="container mx-auto py-3 flex justify-between items-center px-4 md:px-0">
             <div class="flex items-center gap-3">
                 <div class="bg-white text-qurban-primary p-2 rounded-xl w-10 h-10 flex items-center justify-center shadow-md">
                     <i class="fa-solid fa-kaaba text-lg"></i>
@@ -106,7 +106,7 @@
     </header>
 
     <!-- Hero / Countdown -->
-    <section class="bg-qurban-dark text-white py-8 relative overflow-hidden rounded-b-[2rem] shadow-xl mb-6">
+    <section class="bg-qurban-dark text-white py-8 relative overflow-hidden rounded-b-[2rem] shadow-xl mb-6 px-4 md:px-0">
         <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]"></div>
         
         <div class="container mx-auto text-center relative z-10">
@@ -136,7 +136,7 @@
     </section>
 
     <!-- Main Content -->
-    <main class="container mx-auto pb-20 flex-grow">
+    <main class="container mx-auto pb-20 flex-grow px-4 md:px-0">
         
         <!-- Summary Stats (Stacked on Mobile) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
@@ -191,19 +191,25 @@
             </div>
         </div>
 
-        <!-- Search & List -->
+        <!-- Search, Filter & List -->
         <div class="glass-card rounded-xl shadow-lg overflow-hidden">
-            <!-- Header List with Sorting & Search -->
+            <!-- Header List with Sorting, Search & Export -->
             <div class="p-4 bg-white border-b border-slate-100 sticky top-0 z-20">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                     <h3 class="font-bold text-lg text-slate-800 flex items-center">
                         <i class="fa-solid fa-list-check mr-2 text-qurban-primary"></i> Data Peserta
                     </h3>
                     
-                    <!-- Fitur Baru: Sort dan Search Group -->
-                    <div class="flex flex-col sm:flex-row gap-2">
+                    <div class="flex flex-col sm:flex-row gap-2 flex-wrap items-stretch sm:items-center">
+                        
+                        <!-- Search Input -->
+                        <div class="relative flex-grow sm:flex-grow-0">
+                            <input type="text" id="search-input" placeholder="Cari nama..." class="w-full sm:w-48 bg-slate-50 border border-slate-200 text-sm rounded-lg px-4 py-2.5 pl-10 focus:outline-none focus:ring-2 focus:ring-qurban-primary transition-all">
+                            <i class="fa-solid fa-search absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                        </div>
+
                         <!-- Sort Dropdown -->
-                        <div class="relative">
+                        <div class="relative flex-grow sm:flex-grow-0">
                             <select id="sort-input" class="w-full sm:w-auto bg-slate-50 border border-slate-200 text-sm rounded-lg px-4 py-2.5 appearance-none focus:outline-none focus:ring-2 focus:ring-qurban-primary transition-all pr-8 cursor-pointer text-slate-600">
                                 <option value="default">Urutan No</option>
                                 <option value="name-asc">Nama (A - Z)</option>
@@ -214,10 +220,14 @@
                             <i class="fa-solid fa-chevron-down absolute right-3.5 top-3.5 text-slate-400 text-xs pointer-events-none"></i>
                         </div>
 
-                        <!-- Search Input -->
-                        <div class="relative">
-                            <input type="text" id="search-input" placeholder="Cari nama..." class="w-full bg-slate-50 border border-slate-200 text-sm rounded-lg px-4 py-2.5 pl-10 focus:outline-none focus:ring-2 focus:ring-qurban-primary transition-all">
-                            <i class="fa-solid fa-search absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                        <!-- Export Buttons -->
+                        <div class="flex gap-2 justify-end">
+                            <button onclick="exportData('csv')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm border border-emerald-700" title="Export ke CSV">
+                                <i class="fa-solid fa-file-csv"></i> CSV
+                            </button>
+                            <button onclick="exportData('txt')" class="bg-slate-700 hover:bg-slate-800 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm border border-slate-800" title="Export ke TXT">
+                                <i class="fa-solid fa-file-lines"></i> TXT
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -255,7 +265,7 @@
             </h3>
             
             <p class="text-sm text-slate-600 mb-3">
-               Untuk konsultasi dan pendaftaran silahkan hubungi:
+                Untuk konsultasi dan pendaftaran silahkan hubungi:
             </p>
             
             <!-- Contacts Grid -->
@@ -347,7 +357,7 @@
             <p class="text-xs text-slate-400 mt-1">
                 Dikembangkan oleh <span class="font-bold text-slate-600">Ayah Syathir</span>
             </p>
-            <p class="text-[10px] text-slate-300 mt-2 font-mono">v1.6</p> <!-- Updated Version -->
+            <p class="text-[10px] text-slate-300 mt-2 font-mono">v1.7</p> <!-- Updated Version -->
         </div>
     </footer>
 
@@ -556,7 +566,7 @@
                         <!-- Desktop Status -->
                         <div class="hidden md:block col-span-1 text-center">
                             ${isLunas 
-                                ? `<i class="fa-solid fa-circle-check text-green-500 text-lg"></i>`
+                                ? `<span class="bg-green-100 text-green-700 text-[10px] px-2 py-1 rounded-full font-bold inline-flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> LUNAS</span>`
                                 : `<i class="fa-regular fa-circle text-slate-300"></i>`
                             }
                         </div>
@@ -594,6 +604,45 @@
 
             // 3. Render ulang list
             renderParticipants(resultData);
+        }
+
+        // --- FUNGSI EXPORT ---
+        function exportData(type) {
+            // Urutkan data berdasarkan ID asli untuk export agar rapi
+            const dataToExport = [...participants].sort((a, b) => a.id - b.id);
+            let content = "";
+            let mimeType = "";
+            let filename = "";
+
+            if (type === 'csv') {
+                content = "No,Nama,Nominal\n";
+                dataToExport.forEach(p => {
+                    // Escape nama jika ada koma di dalamnya
+                    let name = p.name.includes(',') ? `"${p.name}"` : p.name;
+                    content += `${p.id},${name},${p.deposited}\n`;
+                });
+                mimeType = "text/csv;charset=utf-8;";
+                filename = "Data_Tabungan_Qurban.csv";
+            } else if (type === 'txt') {
+                content = "DATA TABUNGAN QURBAN PURI HIJAU 2026\n";
+                content += "====================================\n\n";
+                dataToExport.forEach(p => {
+                    content += `${p.id}. ${p.name} - Rp ${p.deposited.toLocaleString('id-ID')}\n`;
+                });
+                mimeType = "text/plain;charset=utf-8;";
+                filename = "Data_Tabungan_Qurban.txt";
+            }
+
+            // Proses trigger unduhan file
+            const blob = new Blob([content], { type: mimeType });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // --- EVENT LISTENERS ---
